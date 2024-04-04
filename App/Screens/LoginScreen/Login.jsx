@@ -14,7 +14,7 @@ export default function Login()  {
                 <Text style={{fontWeight:'bold'}}>
                      professional cleaning and repair
                 </Text> 
-                services
+                servicess
             </Text>
             <Text style={{fontSize:17, color:Colors.WHITE,textAlign:'center',marginTop:20}}>Best App to find services near you which deliver you a professional service</Text>
             <TouchableOpacity style={styles.getStarted}
