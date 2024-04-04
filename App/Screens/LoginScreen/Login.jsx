@@ -1,8 +1,29 @@
 import React, { Component } from 'react'
 import { Text, View , StyleSheet, Image, TouchableOpacity} from 'react-native'
 import Colors from '../../Utils/Colors';
-
+import * as WebBrowser from "expo-web-browser";
+import { useOAuth } from "@clerk/clerk-expo";
+import { useWarmUpBrowser } from "../../hooks/useWarmUpBrowser";
+WebBrowser.maybeCompleteAuthSession();
 export default function Login()  {
+    useWarmUpBrowser();
+    const { startOAuthFlow } = useOAuth({ strategy: "oauth_google" });
+ 
+    const onPress = React.useCallback(async () => {
+        try {
+        const { createdSessionId, signIn, signUp, setActive } =
+            await startOAuthFlow();
+    
+        if (createdSessionId) {
+            setActive({ session: createdSessionId });
+        } else {
+            // Use signIn or signUp for next steps such as MFA
+        }
+        } catch (err) {
+        console.error("OAuth error", err);
+        }
+    }, []);
+
   return (
       <View style={{alignItems:'center'}}>
         <Image source={require('../../../assets/images/login.png')}
@@ -18,7 +39,7 @@ export default function Login()  {
             </Text>
             <Text style={{fontSize:17, color:Colors.WHITE,textAlign:'center',marginTop:20}}>Best App to find services near you which deliver you a professional service</Text>
             <TouchableOpacity style={styles.getStarted}
-            onPress={()=>console.log(10)}>
+            onPress={onPress}>
                 <Text 
                 style={{textAlign:'center',
                 color:Colors.PRIMARY}}>
@@ -35,7 +56,7 @@ const styles = StyleSheet.create({
         height:450,
         marginTop:70,
         borderWidth:4,
-        borderColor:Colors.BLACK,
+        
         borderRadius:16
     },
     subContainer:{
